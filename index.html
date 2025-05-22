@@ -9,9 +9,9 @@
     rel="stylesheet"
   />
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
     body {
-      font-family: "Indie Flower", cursive;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       background: linear-gradient(135deg, #000000, #ff69b4);
       min-height: 100vh;
       margin: 0;
@@ -25,10 +25,10 @@
       background: #1a001a;
       border-radius: 20px;
       box-shadow:
-        8px 8px 15px #330033,
-        -8px -8px 15px #660066,
-        inset 2px 2px 5px #440044,
-        inset -2px -2px 5px #220022;
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066,
+        inset 1.5px 1.5px 4px #440044,
+        inset -1.5px -1.5px 4px #220022;
       color: #ffc0cb;
       transition: box-shadow 0.3s ease, transform 0.2s ease;
       width: 100%;
@@ -37,24 +37,24 @@
     }
     .neumorph:focus-within {
       box-shadow:
-        8px 8px 20px #ff69b4,
-        -8px -8px 20px #ffb6c1,
-        inset 2px 2px 6px #ff69b4,
-        inset -2px -2px 6px #ffb6c1;
+        6px 6px 14px #e754a0,
+        -6px -6px 14px #f2a1c1,
+        inset 1.5px 1.5px 5px #e754a0,
+        inset -1.5px -1.5px 5px #f2a1c1;
       outline: none;
-      transform: translateY(-2px);
+      transform: translateY(-1.5px);
     }
     input,
     button {
-      font-family: "Indie Flower", cursive;
+      font-family: inherit;
       font-size: 1.4rem;
       color: #ffc0cb;
       background: #330033;
       border: none;
       border-radius: 12px;
       box-shadow:
-        inset 4px 4px 8px #660066,
-        inset -4px -4px 8px #330033;
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
       padding: 1rem 1.5rem;
       transition: box-shadow 0.3s ease, background-color 0.3s ease;
       width: 100%;
@@ -70,55 +70,57 @@
     input:focus {
       outline: none;
       box-shadow:
-        0 0 12px #ff69b4,
-        inset 4px 4px 10px #ff69b4,
-        inset -4px -4px 10px #ffb6c1;
+        0 0 8px #e754a0,
+        inset 3px 3px 7px #e754a0,
+        inset -3px -3px 7px #f2a1c1;
       background: #440044;
     }
     button {
       cursor: pointer;
       box-shadow:
-        8px 8px 20px #330033,
-        -8px -8px 20px #660066;
+        6px 6px 14px #330033,
+        -6px -6px 14px #660066;
       font-weight: 700;
       user-select: none;
       margin-top: 1.5rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      background: linear-gradient(135deg, #e754a0, #d81b60);
       color: #fff;
-      text-shadow: 0 0 5px #ff69b4;
+      text-shadow: 0 0 3px #e754a0;
       transition: box-shadow 0.3s ease, background 0.3s ease;
       box-shadow:
-        6px 6px 12px #a0006a,
-        -6px -6px 12px #ff4db8;
+        5px 5px 10px #8a0050,
+        -5px -5px 10px #d82a7a;
       min-height: 3.5rem;
       padding: 0 1.5rem;
+      font-family: inherit;
     }
     button:hover {
-      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      background: linear-gradient(135deg, #d81b60, #e754a0);
       box-shadow:
-        8px 8px 20px #ff4db8,
-        -8px -8px 20px #ff1493;
-      transform: translateY(-2px);
+        6px 6px 14px #d82a7a,
+        -6px -6px 14px #d81b60;
+      transform: translateY(-1.5px);
     }
     button:active {
       box-shadow:
-        inset 6px 6px 12px #660066,
-        inset -6px -6px 12px #330033;
+        inset 5px 5px 10px #660044,
+        inset -5px -5px 10px #330022;
       transform: translateY(1px);
     }
     h1 {
       font-size: 3rem;
       font-weight: 900;
       margin-bottom: 2rem;
-      color: #ff69b4;
+      color: #e754a0;
       user-select: none;
       text-align: center;
       text-shadow:
-        0 0 8px #ff69b4,
-        0 0 15px #ff1493;
+        0 0 5px #e754a0,
+        0 0 10px #d81b60;
       letter-spacing: 0.1em;
+      font-family: inherit;
     }
     form {
       width: 100%;
@@ -134,6 +136,7 @@
       font-size: 1.2rem;
       letter-spacing: 0.03em;
       display: block;
+      font-family: inherit;
     }
     .error-message {
       color: #ff4500;
@@ -145,7 +148,8 @@
       margin-top: -0.75rem;
       margin-bottom: 0.5rem;
       letter-spacing: 0.02em;
-      text-shadow: 0 0 3px #ff4500;
+      text-shadow: 0 0 2px #ff4500;
+      font-family: inherit;
     }
     @media (max-width: 480px) {
       .neumorph {
@@ -173,7 +177,7 @@
     <h1>Book it - Login</h1>
     <form id="loginForm" novalidate="">
       <div>
-        <label for="username">PhoneNumber Or Username</label>
+        <label for="username">Username</label>
         <input
           type="text"
           id="username"
@@ -184,7 +188,7 @@
           aria-required="true"
           aria-describedby="usernameError"
         />
-        <p id="usernameError" class="error-message" aria-live="polite"></p>
+        <p id="usernameError" class="error-message" aria-live="polite" style=""></p>
       </div>
       <div>
         <label for="password">Password</label>
@@ -198,7 +202,7 @@
           aria-required="true"
           aria-describedby="passwordError"
         />
-        <p id="passwordError" class="error-message" aria-live="polite"></p>
+        <p id="passwordError" class="error-message" aria-live="polite" style=""></p>
       </div>
       <button type="submit" aria-label="Login to Book it" >Login</button>
       <p id="loginError" class="error-message" aria-live="polite"></p>
@@ -222,14 +226,17 @@
       let valid = true;
 
       if (!usernameInput.value.trim()) {
-        usernameError.textContent = "Username is required.";
+        alert("Username is required.");
         valid = false;
       }
       if (!passwordInput.value.trim()) {
-        passwordError.textContent = "Password is required.";
+        alert("Password is required.");
         valid = false;
       }
       if (!valid) return;
+
+      // For demo, accept any username and password
+      // On success, redirect to main app page (replace with actual URL or path)
       window.location.href = "app.html";
     });
   </script>
