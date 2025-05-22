@@ -1,0 +1,1824 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Book it - Interactive Features</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+    body {
+      font-family: 'Indie Flower', cursive;
+      background: linear-gradient(135deg, #000000, #ff69b4);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      color: #ffc0cb;
+    }
+    .neumorph {
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      transition: box-shadow 0.3s ease;
+      color: #ffc0cb;
+    }
+    .neumorph:active {
+      box-shadow:
+        inset 6px 6px 12px #330033,
+        inset -6px -6px 12px #660066;
+    }
+    .neumorph-circle {
+      border-radius: 50%;
+      background: #1a001a;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      transition: box-shadow 0.3s ease;
+      position: relative;
+      color: #ffc0cb;
+    }
+    .neumorph-circle:active {
+      box-shadow:
+        inset 6px 6px 12px #330033,
+        inset -6px -6px 12px #660066;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      color: #ffc0cb;
+    }
+    main {
+      flex: 1;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      color: #ffc0cb;
+    }
+    button {
+      cursor: pointer;
+      color: #ffc0cb;
+    }
+    /* Scrollbar for right sidebar text */
+    aside.right-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+    aside.right-scroll::-webkit-scrollbar-track {
+      background: #1a001a;
+      border-radius: 10px;
+    }
+    aside.right-scroll::-webkit-scrollbar-thumb {
+      background: #660066;
+      border-radius: 10px;
+    }
+    /* Sliding footer styles */
+    #footerButtons {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding-top: 0;
+    }
+    #footerButtons.open {
+      max-height: 200px; /* enough to show all buttons */
+      padding-top: 1rem;
+    }
+    #footerToggle {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      color: #ffc0cb;
+    }
+    #footerToggle i {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    #footerToggle.open i {
+      transform: rotate(180deg);
+    }
+    /* Profile dropdown styles */
+    #profileDropdown {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      width: 160px;
+      display: none;
+      flex-direction: column;
+      padding: 0.5rem 0;
+      z-index: 20;
+      user-select: none;
+      color: #ffc0cb;
+    }
+    #profileDropdown.open {
+      display: flex;
+    }
+    #profileDropdown button {
+      background: transparent;
+      border: none;
+      padding: 0.5rem 1rem;
+      text-align: left;
+      font-family: 'Indie Flower', cursive;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #ffc0cb;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+    #profileDropdown button:hover,
+    #profileDropdown button:focus {
+      background-color: #660066;
+      outline: none;
+      color: #ffd6e8;
+    }
+    /* AI Assistant button and panel */
+    #aiAssistantButton {
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      user-select: none;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 40;
+      color: #ffc0cb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    #aiAssistantPanel {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 320px;
+      max-width: 90vw;
+      background: #1a001a;
+      border-radius: 16px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      z-index: 30;
+      font-family: 'Indie Flower', cursive;
+      color: #ffc0cb;
+    }
+    #aiAssistantPanel.open {
+      display: flex;
+    }
+    #aiAssistantPanel header {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      user-select: none;
+      color: #ffc0cb;
+    }
+    #aiAssistantPanel textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 8px;
+      border: none;
+      padding: 0.5rem;
+      font-family: 'Indie Flower', cursive;
+      font-size: 1rem;
+      resize: vertical;
+      box-shadow:
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
+      margin-bottom: 0.5rem;
+      background: #330033;
+      color: #ffc0cb;
+    }
+    #aiAssistantPanel button {
+      align-self: flex-end;
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 0.5rem 1rem;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 600;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      color: #ffb6c1;
+    }
+    #aiAssistantPanel button:active {
+      box-shadow:
+        inset 6px 6px 12px #660066,
+        inset -6px -6px 12px #330033;
+    }
+    /* Map container */
+    #mapContainer {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
+      position: relative;
+    }
+    #mapIframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      filter: brightness(0.8) contrast(1.2);
+    }
+    /* Smaller menu button */
+    #menuButton {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffc0cb;
+    }
+    #menuButton i {
+      font-size: 1.25rem;
+    }
+    /* Logo with smiley */
+    #logo {
+      width: 64px;
+      height: 48px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+      color: #ffb6c1;
+    }
+    #logo svg {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      fill: #660066;
+      filter: drop-shadow(1px 1px 1px rgba(102,0,102,0.7));
+    }
+    /* Profile button in header */
+    #profileButton {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1a001a;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      color: #ffc0cb;
+      position: relative;
+      flex-shrink: 0;
+      transition: box-shadow 0.3s ease;
+    }
+    #profileButton:active {
+      box-shadow:
+        inset 6px 6px 12px #330033,
+        inset -6px -6px 12px #660066;
+    }
+    /* Profile icon svg */
+    #profileButton svg {
+      width: 24px;
+      height: 24px;
+      fill: #ffc0cb;
+    }
+    /* Price text */
+    .price-text {
+      font-weight: 700;
+      color: #ff69b4;
+      font-family: 'Indie Flower', cursive;
+    }
+    /* Occasion text */
+    .occasion-text {
+      font-style: italic;
+      color: #ffb6c1;
+      font-family: 'Indie Flower', cursive;
+    }
+    /* Carousel styles */
+    #carousel {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      user-select: none;
+    }
+    #carousel .slide {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 1.5rem;
+      color: #ffc0cb;
+      position: relative;
+    }
+    #carousel .slide.active {
+      display: flex;
+    }
+    #carousel .slide img {
+      border-radius: 12px;
+      max-height: 300px;
+      width: 100%;
+      object-fit: cover;
+      box-shadow:
+        4px 4px 8px rgba(102,0,102,0.7);
+      flex-shrink: 0;
+      user-select: none;
+    }
+    #carousel .slide-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    #carousel .slide-content h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      user-select: none;
+      color: #ff69b4;
+    }
+    #carousel .slide-content p {
+      margin: 0;
+    }
+    #carousel .slide-content .status {
+      font-weight: 600;
+      user-select: none;
+    }
+    #carousel .slide-content .status.available {
+      color: #ff69b4;
+    }
+    #carousel .slide-content .status.limited {
+      color: #ff1493;
+    }
+    #carousel .slide-content .status.book-in-advance {
+      color: #ff4500;
+    }
+    #carousel .slide-content .price-text {
+      font-weight: 700;
+      color: #ff69b4;
+      font-family: 'Indie Flower', cursive;
+      user-select: none;
+    }
+    #carousel .slide-content .occasion-text {
+      font-style: italic;
+      color: #ffb6c1;
+      font-family: 'Indie Flower', cursive;
+      user-select: none;
+    }
+    /* Carousel navigation buttons */
+    #carouselNav {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    #carouselNav button {
+      background: #1a001a;
+      border-radius: 50%;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      width: 48px;
+      height: 48px;
+      color: #ffc0cb;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+    #carouselNav button:active {
+      box-shadow:
+        inset 6px 6px 12px #330033,
+        inset -6px -6px 12px #660066;
+    }
+    /* Location & Details buttons container */
+    .buttons-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      z-index: 10;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    /* Location & Details buttons */
+    .location-button, .details-button {
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 0.4rem 0.8rem;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 600;
+      cursor: pointer;
+      color: #ffc0cb;
+      user-select: none;
+      transition: box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+    .location-button:active, .details-button:active {
+      box-shadow:
+        inset 6px 6px 12px #330033,
+        inset -6px -6px 12px #660066;
+    }
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      #carousel {
+        max-width: 700px;
+      }
+      #carousel .slide {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+      #carousel .slide img {
+        width: 50%;
+        max-height: 300px;
+      }
+      #carousel .slide-content {
+        width: 50%;
+        justify-content: center;
+      }
+      .buttons-container {
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+    /* Popup overlay */
+    #infoPopupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+    }
+    #infoPopupOverlay.open {
+      display: flex;
+    }
+    /* Popup content */
+    #infoPopup {
+      background: #1a001a;
+      border-radius: 16px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      max-width: 600px;
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 1.5rem 2rem 2rem 2rem;
+      color: #ff69b4;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 600;
+      white-space: pre-wrap;
+      position: relative;
+      outline: none;
+    }
+    #infoPopupClose {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: transparent;
+      border: none;
+      color: #ffc0cb;
+      font-size: 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.25rem 0.5rem 0 0.5rem;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+    #infoPopupClose:hover,
+    #infoPopupClose:focus {
+      color: #ff69b4;
+      outline: none;
+    }
+    /* Footer demo popup */
+    #footerDemoPopupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 1rem;
+    }
+    #footerDemoPopupOverlay.open {
+      display: flex;
+    }
+    #footerDemoPopup {
+      background: #1a001a;
+      border-radius: 16px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      max-width: 700px;
+      width: 100%;
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 1.5rem 2rem 2rem 2rem;
+      color: #ff69b4;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 600;
+      white-space: pre-wrap;
+      position: relative;
+      outline: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #footerDemoPopupClose {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: transparent;
+      border: none;
+      color: #ffc0cb;
+      font-size: 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.25rem 0.5rem 0 0.5rem;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+    #footerDemoPopupClose:hover,
+    #footerDemoPopupClose:focus {
+      color: #ff69b4;
+      outline: none;
+    }
+    /* Glider container */
+    .glider-container {
+      flex: 1;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 0.5rem;
+    }
+    .glider-item {
+      min-width: 280px;
+      background: #000000;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 1rem;
+      color: #ff69b4;
+      font-family: 'Indie Flower', cursive;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      user-select: none;
+    }
+    .glider-item h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #ffc0cb;
+      margin: 0;
+    }
+    .glider-item button {
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 0.5rem 1rem;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 600;
+      cursor: pointer;
+      color: #ffc0cb;
+      transition: box-shadow 0.3s ease;
+      user-select: none;
+      align-self: flex-start;
+    }
+    .glider-item button:active {
+      box-shadow:
+        inset 6px 6px 12px #660066,
+        inset -6px -6px 12px #330033;
+    }
+    /* Scrollbar for glider */
+    .glider-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .glider-container::-webkit-scrollbar-track {
+      background: #1a001a;
+      border-radius: 10px;
+    }
+    .glider-container::-webkit-scrollbar-thumb {
+      background: #660066;
+      border-radius: 10px;
+    }
+    /* Lottery spinner */
+    #lotterySpinner {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 50%;
+      border: 8px solid #660066;
+      box-shadow:
+        inset 3px 3px 6px #330033,
+        inset -3px -3px 6px #660066;
+      user-select: none;
+    }
+    #lotteryWheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      transform-origin: center center;
+      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    #lotteryWheel div {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 10px;
+      font-weight: 700;
+      font-family: 'Indie Flower', cursive;
+      color: #ffc0cb;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    #lotteryPointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 20px solid #ff69b4;
+      filter: drop-shadow(0 0 3px #ff69b4);
+      user-select: none;
+      z-index: 10;
+    }
+    /* Booking form */
+    #bookingForm label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 700;
+      color: #ffc0cb;
+    }
+    #bookingForm input, #bookingForm select {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      border: none;
+      background: #330033;
+      color: #ffc0cb;
+      font-family: 'Indie Flower', cursive;
+      font-size: 1rem;
+      box-shadow:
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
+      margin-bottom: 0.75rem;
+    }
+    #bookingForm button {
+      width: 100%;
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 0.5rem 1rem;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 700;
+      cursor: pointer;
+      color: #ff69b4;
+      transition: box-shadow 0.3s ease;
+    }
+    #bookingForm button:active {
+      box-shadow:
+        inset 6px 6px 12px #660066,
+        inset -6px -6px 12px #330033;
+    }
+    /* Trip planner */
+    #tripPlanner label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 700;
+      color: #ffc0cb;
+    }
+    #tripPlanner input {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      border: none;
+      background: #330033;
+      color: #ffc0cb;
+      font-family: 'Indie Flower', cursive;
+      font-size: 1rem;
+      box-shadow:
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
+      margin-bottom: 0.75rem;
+    }
+    #tripPlanner button {
+      width: 100%;
+      background: #1a001a;
+      border-radius: 12px;
+      box-shadow:
+        6px 6px 12px #330033,
+        -6px -6px 12px #660066;
+      padding: 0.5rem 1rem;
+      font-family: 'Indie Flower', cursive;
+      font-weight: 700;
+      cursor: pointer;
+      color: #ff69b4;
+      transition: box-shadow 0.3s ease;
+    }
+    #tripPlanner button:active {
+      box-shadow:
+        inset 6px 6px 12px #660066,
+        inset -6px -6px 12px #330033;
+    }
+    #tripRoute {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #ffb6c1;
+      font-family: 'Indie Flower', cursive;
+      white-space: pre-wrap;
+      min-height: 2.5rem;
+    }
+    /* Cab spots list */
+    #cabSpotsList {
+      max-height: 250px;
+      overflow-y: auto;
+      border-radius: 12px;
+      background: #000000;
+      padding: 0.5rem;
+      box-shadow:
+        inset 3px 3px 6px #660066,
+        inset -3px -3px 6px #330033;
+      font-family: 'Indie Flower', cursive;
+      color: #ff69b4;
+      user-select: none;
+    }
+    #cabSpotsList li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    #cabSpotsList li:last-child {
+      margin-bottom: 0;
+    }
+    #cabSpotsList img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      border-radius: 6px;
+    }
+    /* Responsive */
+    @media (max-width: 640px) {
+      .glider-item {
+        min-width: 90vw;
+      }
+    }
+  </style>
+ </head>
+ <body>
+  <!-- Header -->
+  <header class="neumorph" style="position: relative;">
+   <div class="neumorph flex items-center justify-center select-none" id="logo">
+      <a href="login.html" class="text-white"><i class="fas fa-home"></i></a>
+    </svg>
+   </div>
+   <h1 class="text-xl font-semibold select-none mx-auto">Book it</h1>
+   <div class="relative" style="width:64px;">
+    <button aria-expanded="false" aria-haspopup="true" aria-label="User profile menu" class="neumorph-circle" id="profileButton" tabindex="0" type="button">
+     <svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+     </svg>
+    </button>
+    <div aria-label="Profile options" id="profileDropdown" role="menu" tabindex="-1">
+     <button role="menuitem" tabindex="0" type="button">Banshika</button>
+     <button role="menuitem" tabindex="0" type="button">Account</button>
+     <button role="menuitem" tabindex="0" type="button">Setting</button>
+    </div>
+   </div>
+  </header>
+  <div class="flex flex-1 border border-transparent p-6 gap-6 flex-col md:flex-row">
+   <!-- Left Sidebar with Menu Button -->
+   <aside class="w-full md:w-40 flex flex-col space-y-5">
+    <button aria-label="Toggle menu" class="neumorph text-sm font-medium select-none flex items-center justify-center" id="menuButton" type="button">
+     <i class="fas fa-bars"></i>
+    </button>
+    <div class="flex flex-col space-y-3 max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out" id="menuItems">
+     <button class="neumorph px-4 py-2 text-sm font-medium select-none" type="button">Passenger</button>
+     <button class="neumorph px-4 py-2 text-sm font-medium select-none" type="button">Driver</button>
+     <button class="neumorph px-4 py-2 text-sm font-medium select-none" type="button">Place</button>
+     <button class="neumorph px-4 py-2 text-sm font-medium select-none" type="button">Many more</button>
+    </div>
+   </aside>
+   <!-- Main Content -->
+   <main class="flex-1 flex flex-col space-y-6 items-center">
+    <h2 class="text-center text-2xl font-semibold select-none w-full max-w-3xl">Here You Go !</h2>
+    <section id="carousel" aria-label="Cab models carousel" class="w-full max-w-3xl relative"></section>
+    <div id="carouselNav" aria-label="Carousel navigation buttons" class="select-none">
+     <button aria-label="Previous cab" id="prevSlide" type="button" class="neumorph" tabindex="0"><i class="fas fa-chevron-left"></i></button>
+     <button aria-label="Next cab" id="nextSlide" type="button" class="neumorph" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    </div>
+   </main>
+   <!-- Right Sidebar -->
+   <aside class="w-full md:w-56 flex flex-col space-y-4 mt-6 md:mt-0">
+    <h3 class="text-center text-lg font-semibold select-none">Map</h3>
+    <div class="flex-1 neumorph p-0 rounded-lg text-sm leading-tight overflow-hidden right-scroll select-none" style="min-height: 300px;">
+     <div id="mapContainer">
+      <iframe allowfullscreen="" id="mapIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12674.92792792704!2d-122.4194155!3d37.7749295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1696080000000!5m2!1sen!2sus" title="Map showing San Francisco with traffic and cabs"></iframe>
+      <div class="pointer-events-none absolute top-0 left-0 w-full h-full" id="mapOverlays">
+       <img alt="Yellow cab icon on map" class="absolute" height="24" src="https://cdn-icons-png.flaticon.com/512/743/743007.png" style="top: 40%; left: 55%;" width="24"/>
+       <img alt="Yellow taxi icon on map" class="absolute" height="24" src="https://cdn-icons-png.flaticon.com/512/743/743007.png" style="top: 45%; left: 60%;" width="24"/>
+       <img alt="Red car icon on map" class="absolute" height="24" src="https://cdn-icons-png.flaticon.com/512/743/743008.png" style="top: 42%; left: 58%;" width="24"/>
+       <img alt="Yellow cab icon on map" class="absolute" height="24" src="https://cdn-icons-png.flaticon.com/512/743/743007.png" style="top: 38%; left: 53%;" width="24"/>
+      </div>
+     </div>
+    </div>
+   </aside>
+  </div>
+  <!-- Footer with sliding buttons -->
+  <footer class="neumorph p-4 flex flex-col items-center">
+   <div aria-label="Toggle footer buttons" class="neumorph-circle" id="footerToggle" role="button" tabindex="0">
+    <i class="fas fa-chevron-up"></i>
+   </div>
+   <div aria-expanded="true" id="footerButtons">
+    <button class="neumorph px-6 py-2 text-sm font-medium select-none footer-demo-button" type="button" data-demo="Cab open">Cab open</button>
+    <button class="neumorph px-6 py-2 text-sm font-medium select-none footer-demo-button" type="button" data-demo="Lottery open">Lottery open</button>
+    <button class="neumorph px-6 py-2 text-sm font-medium select-none footer-demo-button" type="button" data-demo="Trip open">Trip open</button>
+    <button class="neumorph px-6 py-2 text-sm font-medium select-none footer-demo-button" type="button" data-demo="Booking open">Booking open</button>
+   </div>
+  </footer>
+  <!-- Info Popup -->
+  <div id="infoPopupOverlay" role="dialog" aria-modal="true" aria-labelledby="infoPopupTitle" tabindex="-1">
+   <div id="infoPopup" tabindex="0">
+    <button id="infoPopupClose" aria-label="Close info popup">&times;</button>
+    <pre id="infoPopupContent" style="margin:0; white-space: pre-wrap; font-family: 'Indie Flower', cursive; font-weight: 600; color: #ff69b4;"></pre>
+   </div>
+  </div>
+  <!-- Footer Demo Popup with Glider -->
+  <div id="footerDemoPopupOverlay" role="dialog" aria-modal="true" aria-labelledby="footerDemoPopupTitle" tabindex="-1">
+   <div id="footerDemoPopup" tabindex="0" aria-live="polite" aria-atomic="true">
+    <button id="footerDemoPopupClose" aria-label="Close footer demo popup">&times;</button>
+    <div class="glider-container" id="gliderContainer" tabindex="0" aria-label="Feature panels"></div>
+   </div>
+  </div>
+  <!-- AI Assistant Panel -->
+  <div aria-label="AI Assistant" id="aiAssistantPanel" role="region">
+   <header>AI Assistant</header>
+   <textarea aria-label="AI assistant input" id="aiInput" placeholder="Ask me anything..."></textarea>
+   <button id="aiSendButton" type="button">Send</button>
+   <div aria-atomic="true" aria-live="polite" id="aiAssistantResponse" role="status"></div>
+  </div>
+  <div aria-label="Toggle AI assistant" class="neumorph-circle flex items-center justify-center text-xs font-semibold select-none cursor-pointer" id="aiAssistantButton" role="button" tabindex="0">
+   <i class="fas fa-robot text-lg"></i>
+  </div>
+  <script>
+   // Data for cabs with location coordinates for map update
+   const cabs = [
+    {
+      name: "Nano",
+      status: "Available now",
+      statusClass: "available",
+      description: "Economical and compact car, ideal for short city rides.",
+      price: "₹8/km",
+      occasion: "Daily commute, short trips",
+      img: "https://storage.googleapis.com/a1aa/image/0bd24493-ecb0-404d-b089-18de3f9b1e7b.jpg",
+      alt: "A compact yellow Tata Nano car parked on a city street",
+      location: { lat: 37.7749, lng: -122.4194 }
+    },
+    {
+      name: "Hatchback",
+      status: "Available now",
+      statusClass: "available",
+      description: "Small and efficient hatchback, perfect for city driving.",
+      price: "₹10/km",
+      occasion: "City rides, errands",
+      img: "https://storage.googleapis.com/a1aa/image/ff538b00-b2eb-4412-8ec9-e42b29aa596b.jpg",
+      alt: "A blue hatchback car parked near a park",
+      location: { lat: 37.7799, lng: -122.4144 }
+    },
+    {
+      name: "Sedan Classic",
+      status: "Available now",
+      statusClass: "available",
+      description: "Comfortable 4-seater sedan, perfect for city rides.",
+      price: "₹15/km",
+      occasion: "Business trips, family rides",
+      img: "https://storage.googleapis.com/a1aa/image/5de17eda-c57f-4ae7-3554-fe35c80b7df9.jpg",
+      alt: "A sleek silver sedan car model parked on a city street with modern buildings in the background",
+      location: { lat: 37.7765, lng: -122.4240 }
+    },
+    {
+      name: "SUV Explorer",
+      status: "Limited availability",
+      statusClass: "limited",
+      description: "Spacious SUV with off-road capabilities.",
+      price: "₹20/km",
+      occasion: "Off-road, family trips, group travel",
+      img: "https://storage.googleapis.com/a1aa/image/e73221ed-3efd-4ec2-6dd5-56c0ea65e6eb.jpg",
+      alt: "A rugged black SUV car model driving on a mountain road with pine trees and blue sky",
+      location: { lat: 37.7700, lng: -122.4300 }
+    },
+    {
+      name: "Luxury Limousine",
+      status: "Book in advance",
+      statusClass: "book-in-advance",
+      description: "Premium limousine for special occasions.",
+      price: "₹50/km",
+      occasion: "Weddings, corporate events, VIP transport",
+      img: "https://storage.googleapis.com/a1aa/image/1b73e1c2-7573-48f4-5967-464d4e84a43a.jpg",
+      alt: "A long black luxury limousine car model parked in front of a hotel entrance with red carpet",
+      location: { lat: 37.7680, lng: -122.4150 }
+    },
+    {
+      name: "Electric Compact",
+      status: "Available now",
+      statusClass: "available",
+      description: "Eco-friendly compact car with zero emissions.",
+      price: "₹18/km",
+      occasion: "Eco-friendly city rides",
+      img: "https://storage.googleapis.com/a1aa/image/6dfaa4fc-439a-46dd-7da5-65b82889bd64.jpg",
+      alt: "A modern white electric compact car model charging at a station in an urban environment",
+      location: { lat: 37.7730, lng: -122.4180 }
+    },
+    {
+      name: "Van Family",
+      status: "Available now",
+      statusClass: "available",
+      description: "Large van suitable for family trips.",
+      price: "₹25/km",
+      occasion: "Family trips, group travel",
+      img: "https://storage.googleapis.com/a1aa/image/a7785e66-1863-43fd-11ce-1876ef5312b3.jpg",
+      alt: "A spacious white family van car model parked in a suburban driveway with children playing nearby",
+      location: { lat: 37.7750, lng: -122.4200 }
+    },
+    {
+      name: "Sport Coupe",
+      status: "Limited availability",
+      statusClass: "limited",
+      description: "Fast and stylish 2-door sports car.",
+      price: "₹30/km",
+      occasion: "Special occasions, stylish rides",
+      img: "https://storage.googleapis.com/a1aa/image/8efe5380-1533-4759-7a83-bebdeeed431f.jpg",
+      alt: "A red sporty coupe car model speeding on a coastal highway with ocean view",
+      location: { lat: 37.7720, lng: -122.4220 }
+    }
+   ];
+
+   // Elements
+   const carousel = document.getElementById('carousel');
+   const prevBtn = document.getElementById('prevSlide');
+   const nextBtn = document.getElementById('nextSlide');
+   const mapIframe = document.getElementById('mapIframe');
+   const mapOverlays = document.getElementById('mapOverlays');
+   const infoPopupOverlay = document.getElementById('infoPopupOverlay');
+   const infoPopupContent = document.getElementById('infoPopupContent');
+   const infoPopupClose = document.getElementById('infoPopupClose');
+
+   // Footer demo popup elements
+   const footerDemoPopupOverlay = document.getElementById('footerDemoPopupOverlay');
+   const footerDemoPopup = document.getElementById('footerDemoPopup');
+   const gliderContainer = document.getElementById('gliderContainer');
+
+   let currentIndex = 0;
+
+   // Create slides dynamically with separate Location and Details buttons above content
+   function createSlides() {
+     cabs.forEach((cab, index) => {
+       const slide = document.createElement('article');
+       slide.className = 'slide';
+       slide.setAttribute('role', 'group');
+       slide.setAttribute('aria-roledescription', 'slide');
+       slide.setAttribute('aria-label', `${index + 1} of ${cabs.length}`);
+       slide.tabIndex = -1;
+
+       slide.innerHTML = `
+         <div class="buttons-container" aria-label="Location and details buttons for ${cab.name}">
+           <button type="button" class="location-button" aria-label="Show location for ${cab.name}">
+             <i class="fas fa-map-marker-alt"></i> Location
+           </button>
+           <button type="button" class="details-button" aria-label="Show details for ${cab.name}">
+             <i class="fas fa-info-circle"></i> Details
+           </button>
+         </div>
+         <img src="${cab.img}" alt="${cab.alt}" loading="lazy" />
+         <div class="slide-content">
+           <h3>${cab.name}</h3>
+           <p class="status ${cab.statusClass}">${cab.status}</p>
+           <p>${cab.description}</p>
+           <p class="price-text">Price: ${cab.price}</p>
+           <p class="occasion-text">Occasion: ${cab.occasion}</p>
+         </div>
+       `;
+
+       // Buttons
+       const locationButton = slide.querySelector('.location-button');
+       const detailsButton = slide.querySelector('.details-button');
+
+       locationButton.addEventListener('click', (e) => {
+         e.stopPropagation();
+         updateMapLocation(cab.location.lat, cab.location.lng, cab.name);
+         showInfoPopup(`Location for ${cab.name}:\nLatitude: ${cab.location.lat}\nLongitude: ${cab.location.lng}`);
+       });
+
+       detailsButton.addEventListener('click', (e) => {
+         e.stopPropagation();
+         showInfoPopup(
+           `Details for ${cab.name}:\n\n` +
+           `Status: ${cab.status}\n` +
+           `Description: ${cab.description}\n` +
+           `Price: ${cab.price}\n` +
+           `Occasion: ${cab.occasion}`
+         );
+       });
+
+       // Clicking slide updates map location and shows location popup
+       slide.addEventListener('click', () => {
+         updateMapLocation(cab.location.lat, cab.location.lng, cab.name);
+         showInfoPopup(`Location for ${cab.name}:\nLatitude: ${cab.location.lat}\nLongitude: ${cab.location.lng}`);
+       });
+
+       carousel.appendChild(slide);
+     });
+   }
+
+   // Show slide by index
+   function showSlide(index) {
+     const slides = carousel.querySelectorAll('.slide');
+     if (index < 0) index = slides.length - 1;
+     if (index >= slides.length) index = 0;
+     currentIndex = index;
+     slides.forEach((slide, i) => {
+       if (i === index) {
+         slide.classList.add('active');
+         slide.tabIndex = 0;
+         slide.focus();
+       } else {
+         slide.classList.remove('active');
+         slide.tabIndex = -1;
+       }
+     });
+     // Update map location to current cab
+     const cab = cabs[index];
+     updateMapLocation(cab.location.lat, cab.location.lng, cab.name);
+   }
+
+   // Update map iframe src with new center and marker
+   function updateMapLocation(lat, lng, label) {
+     const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=14&output=embed`;
+     mapIframe.src = embedUrl;
+
+     // Clear previous overlays
+     while (mapOverlays.firstChild) {
+       mapOverlays.removeChild(mapOverlays.firstChild);
+     }
+
+     // Add a marker overlay icon centered in the map container
+     const marker = document.createElement('img');
+     marker.src = "https://cdn-icons-png.flaticon.com/512/743/743007.png";
+     marker.alt = `Marker for ${label} cab location`;
+     marker.style.position = "absolute";
+     marker.style.top = "50%";
+     marker.style.left = "50%";
+     marker.style.width = "32px";
+     marker.style.height = "32px";
+     marker.style.transform = "translate(-50%, -100%)";
+     marker.style.pointerEvents = "none";
+     mapOverlays.appendChild(marker);
+   }
+
+   // Show info popup with text
+   function showInfoPopup(text) {
+     infoPopupContent.textContent = text;
+     infoPopupOverlay.classList.add('open');
+     infoPopupContent.focus();
+   }
+
+   // Close info popup
+   infoPopupClose.addEventListener('click', () => {
+     infoPopupOverlay.classList.remove('open');
+   });
+
+   // Close popup on Escape key
+   document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape' && infoPopupOverlay.classList.contains('open')) {
+       infoPopupOverlay.classList.remove('open');
+     }
+   });
+
+   // Navigation handlers
+   prevBtn.addEventListener('click', () => {
+     showSlide(currentIndex - 1);
+   });
+   nextBtn.addEventListener('click', () => {
+     showSlide(currentIndex + 1);
+   });
+
+   // Keyboard navigation for carousel buttons
+   prevBtn.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+       e.preventDefault();
+       showSlide(currentIndex - 1);
+     }
+   });
+   nextBtn.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+       e.preventDefault();
+       showSlide(currentIndex + 1);
+     }
+   });
+
+   // Initialize carousel
+   createSlides();
+   showSlide(0);
+
+   // Footer toggle
+   const footerToggle = document.getElementById('footerToggle');
+   const footerButtons = document.getElementById('footerButtons');
+   const icon = footerToggle.querySelector('i');
+
+   footerButtons.classList.add('open');
+   footerToggle.classList.add('open');
+   footerToggle.setAttribute('aria-expanded', 'true');
+
+   function toggleFooter() {
+     footerButtons.classList.toggle('open');
+     footerToggle.classList.toggle('open');
+     const expanded = footerToggle.classList.contains('open');
+     footerToggle.setAttribute('aria-expanded', expanded.toString());
+     icon.classList.toggle('fa-chevron-up');
+     icon.classList.toggle('fa-chevron-down');
+   }
+
+   footerToggle.addEventListener('click', toggleFooter);
+   footerToggle.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+       e.preventDefault();
+       toggleFooter();
+     }
+   });
+
+   // Menu toggle
+   const menuButton = document.getElementById('menuButton');
+   const menuItems = document.getElementById('menuItems');
+
+   menuButton.addEventListener('click', () => {
+     if (menuItems.style.maxHeight && menuItems.style.maxHeight !== '0px') {
+       menuItems.style.maxHeight = '0';
+     } else {
+       menuItems.style.maxHeight = menuItems.scrollHeight + 'px';
+     }
+   });
+
+   menuItems.style.maxHeight = '0';
+
+   // Profile dropdown toggle
+   const profileButton = document.getElementById('profileButton');
+   const profileDropdown = document.getElementById('profileDropdown');
+
+   function toggleProfileDropdown() {
+     const isOpen = profileDropdown.classList.toggle('open');
+     profileButton.setAttribute('aria-expanded', isOpen.toString());
+   }
+
+   profileButton.addEventListener('click', (e) => {
+     e.stopPropagation();
+     toggleProfileDropdown();
+   });
+
+   profileButton.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+       e.preventDefault();
+       toggleProfileDropdown();
+     }
+   });
+
+   document.addEventListener('click', (e) => {
+     if (!profileDropdown.contains(e.target) && !profileButton.contains(e.target)) {
+       profileDropdown.classList.remove('open');
+       profileButton.setAttribute('aria-expanded', 'false');
+     }
+   });
+
+   document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape') {
+       profileDropdown.classList.remove('open');
+       profileButton.setAttribute('aria-expanded', 'false');
+       profileButton.focus();
+     }
+   });
+
+   // AI Assistant toggle and functionality
+   const aiAssistantButton = document.getElementById('aiAssistantButton');
+   const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+   const aiInput = document.getElementById('aiInput');
+   const aiSendButton = document.getElementById('aiSendButton');
+   const aiAssistantResponse = document.getElementById('aiAssistantResponse');
+
+   function toggleAIAssistant() {
+     const isOpen = aiAssistantPanel.classList.toggle('open');
+     if (isOpen) {
+       aiInput.focus();
+     } else {
+       aiAssistantResponse.textContent = '';
+       aiInput.value = '';
+     }
+   }
+
+   aiAssistantButton.addEventListener('click', (e) => {
+     e.stopPropagation();
+     toggleAIAssistant();
+   });
+
+   aiAssistantButton.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+       e.preventDefault();
+       toggleAIAssistant();
+     }
+   });
+
+   document.addEventListener('click', (e) => {
+     if (!aiAssistantPanel.contains(e.target) && !aiAssistantButton.contains(e.target)) {
+       aiAssistantPanel.classList.remove('open');
+       aiAssistantResponse.textContent = '';
+       aiInput.value = '';
+     }
+   });
+
+   document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape') {
+       aiAssistantPanel.classList.remove('open');
+       aiAssistantResponse.textContent = '';
+       aiInput.value = '';
+       aiAssistantButton.focus();
+     }
+   });
+
+   function getAIResponse(question) {
+     const lowerQ = question.toLowerCase();
+     if (!question.trim()) return "Please ask a question.";
+     if (lowerQ.includes("hello") || lowerQ.includes("hi")) return "Hello! How can I assist you today?";
+     if (lowerQ.includes("cab")) return "You can book a cab using the 'Cab open' button in the footer.";
+     if (lowerQ.includes("lottery")) return "The lottery feature is available in the footer under 'Lottery open'.";
+     if (lowerQ.includes("trip")) return "Plan your trips easily with the 'Trip open' option.";
+     if (lowerQ.includes("booking")) return "Use the 'Booking open' button to manage your bookings.";
+     return "Sorry, I don't have an answer for that yet. Please try another question.";
+   }
+
+   aiSendButton.addEventListener('click', () => {
+     const question = aiInput.value.trim();
+     if (!question) {
+       aiAssistantResponse.textContent = "Please ask a question.";
+       return;
+     }
+     aiAssistantResponse.textContent = "Thinking...";
+     aiSendButton.disabled = true;
+     aiInput.disabled = true;
+     setTimeout(() => {
+       aiAssistantResponse.textContent = getAIResponse(question);
+       aiSendButton.disabled = false;
+       aiInput.disabled = false;
+       aiInput.focus();
+     }, 800);
+   });
+
+   aiInput.addEventListener('keydown', (e) => {
+     if (e.key === 'Enter' && !e.shiftKey) {
+       e.preventDefault();
+       aiSendButton.click();
+     }
+   });
+
+   // Footer demo buttons functionality with glider and interactive features
+   const footerDemoButtons = document.querySelectorAll('.footer-demo-button');
+
+   // Clear glider container
+   function clearGlider() {
+     gliderContainer.innerHTML = '';
+   }
+
+   // Cab open feature: show cabs on map and list with clickable items
+   function cabOpenFeature() {
+     clearGlider();
+     const container = document.createElement('div');
+     container.className = 'glider-item';
+     container.setAttribute('tabindex', '0');
+     container.setAttribute('aria-label', 'Cab open feature panel');
+
+     const title = document.createElement('h3');
+     title.textContent = 'Cab Open - Available Cars';
+     container.appendChild(title);
+
+     const list = document.createElement('ul');
+     list.id = 'cabSpotsList';
+     list.setAttribute('aria-label', 'List of available cabs');
+
+     cabs.forEach(cab => {
+       const li = document.createElement('li');
+       li.tabIndex = 0;
+       li.setAttribute('role', 'button');
+       li.setAttribute('aria-label', `Show location of ${cab.name}`);
+       li.style.cursor = 'pointer';
+
+       const img = document.createElement('img');
+       img.src = cab.img;
+       img.alt = cab.alt;
+       img.loading = 'lazy';
+       img.style.borderRadius = '8px';
+       img.style.width = '40px';
+       img.style.height = '30px';
+       img.style.objectFit = 'cover';
+       li.appendChild(img);
+
+       const span = document.createElement('span');
+       span.textContent = cab.name;
+       li.appendChild(span);
+
+       li.addEventListener('click', () => {
+         updateMapLocation(cab.location.lat, cab.location.lng, cab.name);
+         showInfoPopup(`Location for ${cab.name}:\nLatitude: ${cab.location.lat}\nLongitude: ${cab.location.lng}`);
+       });
+
+       li.addEventListener('keydown', (e) => {
+         if (e.key === 'Enter' || e.key === ' ') {
+           e.preventDefault();
+           li.click();
+         }
+       });
+
+       list.appendChild(li);
+     });
+
+     container.appendChild(list);
+     gliderContainer.appendChild(container);
+     container.focus();
+   }
+
+   // Lottery open feature: spinner with states and fare multipliers
+   function lotteryOpenFeature() {
+     clearGlider();
+     const container = document.createElement('div');
+     container.className = 'glider-item';
+     container.setAttribute('tabindex', '0');
+     container.setAttribute('aria-label', 'Lottery open feature panel');
+
+     const title = document.createElement('h3');
+     title.textContent = 'Lottery Open - Spin to Decide Fare';
+     container.appendChild(title);
+
+     const spinner = document.createElement('div');
+     spinner.id = 'lotterySpinner';
+     spinner.setAttribute('aria-live', 'polite');
+     spinner.setAttribute('aria-atomic', 'true');
+     spinner.setAttribute('role', 'region');
+     spinner.setAttribute('aria-label', 'Lottery fare spinner');
+
+     const pointer = document.createElement('div');
+     pointer.id = 'lotteryPointer';
+     spinner.appendChild(pointer);
+
+     const wheel = document.createElement('div');
+     wheel.id = 'lotteryWheel';
+
+     // States and multipliers
+     const states = [
+       { name: 'California', multiplier: 1.0, color: '#ff69b4' },
+       { name: 'Texas', multiplier: 1.2, color: '#ff1493' },
+       { name: 'New York', multiplier: 1.5, color: '#ff4500' },
+       { name: 'Florida', multiplier: 1.1, color: '#db7093' },
+       { name: 'Illinois', multiplier: 1.3, color: '#c71585' },
+       { name: 'Nevada', multiplier: 0.9, color: '#ff69b4' },
+       { name: 'Washington', multiplier: 1.4, color: '#ff1493' },
+       { name: 'Oregon', multiplier: 1.0, color: '#ff4500' }
+     ];
+
+     const segmentAngle = 360 / states.length;
+
+     states.forEach((state, i) => {
+       const segment = document.createElement('div');
+       segment.style.transform = `rotate(${i * segmentAngle}deg) skewY(-${90 - segmentAngle}deg)`;
+       segment.style.backgroundColor = state.color;
+       segment.style.position = 'absolute';
+       segment.style.width = '50%';
+       segment.style.height = '50%';
+       segment.style.top = '50%';
+       segment.style.left = '50%';
+       segment.style.transformOrigin = '0% 0%';
+       segment.style.border = '1px solid #330033';
+       segment.style.color = '#1f001f';
+       segment.style.fontWeight = '700';
+       segment.style.fontFamily = "'Indie Flower', cursive";
+       segment.style.fontSize = '0.8rem';
+       segment.style.display = 'flex';
+       segment.style.alignItems = 'center';
+       segment.style.justifyContent = 'flex-start';
+       segment.style.paddingLeft = '10px';
+       segment.style.userSelect = 'none';
+       segment.textContent = state.name;
+       wheel.appendChild(segment);
+     });
+
+     spinner.appendChild(wheel);
+     container.appendChild(spinner);
+
+     const spinButton = document.createElement('button');
+     spinButton.textContent = 'Spin the Wheel';
+     spinButton.setAttribute('aria-label', 'Spin the lottery wheel');
+     container.appendChild(spinButton);
+
+     const resultText = document.createElement('p');
+     resultText.style.marginTop = '1rem';
+     resultText.style.color = '#ff69b4';
+     resultText.style.fontWeight = '700';
+     resultText.style.minHeight = '2rem';
+     container.appendChild(resultText);
+
+     let spinning = false;
+
+     spinButton.addEventListener('click', () => {
+       if (spinning) return;
+       spinning = true;
+       resultText.textContent = 'Spinning...';
+       const spins = Math.floor(Math.random() * 3) + 4; // 4 to 6 spins
+       const selectedIndex = Math.floor(Math.random() * states.length);
+       const finalAngle = 360 * spins + (360 - selectedIndex * segmentAngle - segmentAngle / 2);
+
+       wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+       wheel.style.transform = `rotate(${finalAngle}deg)`;
+
+       setTimeout(() => {
+         spinning = false;
+         const state = states[selectedIndex];
+         resultText.textContent = `You landed on ${state.name}! Fare multiplier: ${state.multiplier}x`;
+       }, 4200);
+     });
+
+     gliderContainer.appendChild(container);
+     container.focus();
+   }
+
+   // Trip open feature: fetch random places globally, measure distance and time, display
+   function tripOpenFeature() {
+     clearGlider();
+     const container = document.createElement('div');
+     container.className = 'glider-item';
+     container.setAttribute('tabindex', '0');
+     container.setAttribute('aria-label', 'Trip open feature panel');
+
+     const title = document.createElement('h3');
+     title.textContent = 'Trip Open - Plan Your Route';
+     container.appendChild(title);
+
+     const form = document.createElement('form');
+     form.id = 'tripPlanner';
+     form.setAttribute('aria-label', 'Trip planner form');
+
+     const fromLabel = document.createElement('label');
+     fromLabel.setAttribute('for', 'tripFrom');
+     fromLabel.textContent = 'From:';
+     form.appendChild(fromLabel);
+
+     const fromInput = document.createElement('input');
+     fromInput.type = 'text';
+     fromInput.id = 'tripFrom';
+     fromInput.name = 'tripFrom';
+     fromInput.placeholder = 'Starting location';
+     fromInput.required = true;
+     form.appendChild(fromInput);
+
+     const toLabel = document.createElement('label');
+     toLabel.setAttribute('for', 'tripTo');
+     toLabel.textContent = 'To:';
+     form.appendChild(toLabel);
+
+     const toInput = document.createElement('input');
+     toInput.type = 'text';
+     toInput.id = 'tripTo';
+     toInput.name = 'tripTo';
+     toInput.placeholder = 'Destination';
+     toInput.required = true;
+     form.appendChild(toInput);
+
+     const startButton = document.createElement('button');
+     startButton.type = 'submit';
+     startButton.textContent = 'Start Trip';
+     form.appendChild(startButton);
+
+     const routeDisplay = document.createElement('div');
+     routeDisplay.id = 'tripRoute';
+     routeDisplay.setAttribute('aria-live', 'polite');
+     routeDisplay.setAttribute('aria-atomic', 'true');
+     container.appendChild(form);
+     container.appendChild(routeDisplay);
+
+     // Helper: Haversine formula to calculate distance in km between two lat/lng points
+     function haversineDistance(lat1, lon1, lat2, lon2) {
+       const toRad = angle => angle * Math.PI / 180;
+       const R = 6371; // Earth radius in km
+       const dLat = toRad(lat2 - lat1);
+       const dLon = toRad(lon2 - lon1);
+       const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                 Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                 Math.sin(dLon/2) * Math.sin(dLon/2);
+       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+       return R * c;
+     }
+
+     // Fetch coordinates for a place name using OpenStreetMap Nominatim API
+     async function fetchCoordinates(place) {
+       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}&limit=1`;
+       try {
+         const response = await fetch(url, {headers: {'Accept-Language': 'en'}});
+         if (!response.ok) throw new Error('Network response was not ok');
+         const data = await response.json();
+         if (data.length === 0) return null;
+         return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+       } catch {
+         return null;
+       }
+     }
+
+     // Estimate travel time based on distance and average speed (50 km/h)
+     function estimateTime(distanceKm) {
+       const speedKmh = 50;
+       const timeHours = distanceKm / speedKmh;
+       const hours = Math.floor(timeHours);
+       const minutes = Math.round((timeHours - hours) * 60);
+       return { hours, minutes };
+     }
+
+     form.addEventListener('submit', async (e) => {
+       e.preventDefault();
+       const from = fromInput.value.trim();
+       const to = toInput.value.trim();
+       if (!from || !to) {
+         routeDisplay.textContent = 'Please enter both starting location and destination.';
+         return;
+       }
+       routeDisplay.textContent = `Fetching coordinates for "${from}" and "${to}"...`;
+
+       const fromCoords = await fetchCoordinates(from);
+       const toCoords = await fetchCoordinates(to);
+
+       if (!fromCoords) {
+         routeDisplay.textContent = `Could not find location for "${from}". Please try a different place.`;
+         return;
+       }
+       if (!toCoords) {
+         routeDisplay.textContent = `Could not find location for "${to}". Please try a different place.`;
+         return;
+       }
+
+       // Calculate distance
+       const distanceKm = haversineDistance(fromCoords.lat, fromCoords.lon, toCoords.lat, toCoords.lon);
+
+       // Estimate time
+       const time = estimateTime(distanceKm);
+
+       // Display results
+       routeDisplay.textContent = `Trip started!\nRoute: ${from} → ${to}\nDistance: ${distanceKm.toFixed(2)} km\nEstimated time: ${time.hours}h ${time.minutes}m`;
+
+       // Update map to show from location
+       updateMapLocation(fromCoords.lat, fromCoords.lon, from);
+
+     });
+
+     gliderContainer.appendChild(container);
+     container.focus();
+   }
+
+   // Booking open feature: simple booking form with confirmation
+   function bookingOpenFeature() {
+     clearGlider();
+     const container = document.createElement('div');
+     container.className = 'glider-item';
+     container.setAttribute('tabindex', '0');
+     container.setAttribute('aria-label', 'Booking open feature panel');
+
+     const title = document.createElement('h3');
+     title.textContent = 'Booking Open - Book Your Ride';
+     container.appendChild(title);
+
+     const form = document.createElement('form');
+     form.id = 'bookingForm';
+     form.setAttribute('aria-label', 'Booking form');
+
+     // Name
+     const nameLabel = document.createElement('label');
+     nameLabel.setAttribute('for', 'bookingName');
+     nameLabel.textContent = 'Name:';
+     form.appendChild(nameLabel);
+
+     const nameInput = document.createElement('input');
+     nameInput.type = 'text';
+     nameInput.id = 'bookingName';
+     nameInput.name = 'bookingName';
+     nameInput.placeholder = 'Your full name';
+     nameInput.required = true;
+     form.appendChild(nameInput);
+
+     // Phone
+     const phoneLabel = document.createElement('label');
+     phoneLabel.setAttribute('for', 'bookingPhone');
+     phoneLabel.textContent = 'Phone:';
+     form.appendChild(phoneLabel);
+
+     const phoneInput = document.createElement('input');
+     phoneInput.type = 'tel';
+     phoneInput.id = 'bookingPhone';
+     phoneInput.name = 'bookingPhone';
+     phoneInput.placeholder = 'Your phone number';
+     phoneInput.required = true;
+     form.appendChild(phoneInput);
+
+     // Pickup location
+     const pickupLabel = document.createElement('label');
+     pickupLabel.setAttribute('for', 'bookingPickup');
+     pickupLabel.textContent = 'Pickup Location:';
+     form.appendChild(pickupLabel);
+
+     const pickupInput = document.createElement('input');
+     pickupInput.type = 'text';
+     pickupInput.id = 'bookingPickup';
+     pickupInput.name = 'bookingPickup';
+     pickupInput.placeholder = 'Where to pick you up?';
+     pickupInput.required = true;
+     form.appendChild(pickupInput);
+
+     // Drop location
+     const dropLabel = document.createElement('label');
+     dropLabel.setAttribute('for', 'bookingDrop');
+     dropLabel.textContent = 'Drop Location:';
+     form.appendChild(dropLabel);
+
+     const dropInput = document.createElement('input');
+     dropInput.type = 'text';
+     dropInput.id = 'bookingDrop';
+     dropInput.name = 'bookingDrop';
+     dropInput.placeholder = 'Your destination';
+     dropInput.required = true;
+     form.appendChild(dropInput);
+
+     // Cab type select
+     const cabLabel = document.createElement('label');
+     cabLabel.setAttribute('for', 'bookingCabType');
+     cabLabel.textContent = 'Cab Type:';
+     form.appendChild(cabLabel);
+
+     const cabSelect = document.createElement('select');
+     cabSelect.id = 'bookingCabType';
+     cabSelect.name = 'bookingCabType';
+     cabSelect.required = true;
+
+     cabs.forEach(cab => {
+       const option = document.createElement('option');
+       option.value = cab.name;
+       option.textContent = cab.name;
+       cabSelect.appendChild(option);
+     });
+     form.appendChild(cabSelect);
+
+     // Submit button
+     const submitBtn = document.createElement('button');
+     submitBtn.type = 'submit';
+     submitBtn.textContent = 'Book Now';
+     form.appendChild(submitBtn);
+
+     // Confirmation message
+     const confirmation = document.createElement('p');
+     confirmation.style.marginTop = '1rem';
+     confirmation.style.color = '#ff69b4';
+     confirmation.style.fontWeight = '700';
+     confirmation.style.minHeight = '2rem';
+     container.appendChild(form);
+     container.appendChild(confirmation);
+
+     form.addEventListener('submit', (e) => {
+       e.preventDefault();
+       const name = nameInput.value.trim();
+       const phone = phoneInput.value.trim();
+       const pickup = pickupInput.value.trim();
+       const drop = dropInput.value.trim();
+       const cabType = cabSelect.value;
+
+       if (!name || !phone || !pickup || !drop || !cabType) {
+         confirmation.textContent = 'Please fill in all fields.';
+         return;
+       }
+
+       confirmation.textContent = 'Booking your ride...';
+
+       setTimeout(() => {
+         confirmation.textContent = `Thank you, ${name}! Your ${cabType} is booked from "${pickup}" to "${drop}". We will contact you at ${phone}.`;
+         form.reset();
+       }, 1500);
+     });
+
+     gliderContainer.appendChild(container);
+     container.focus();
+   }
+
+   // Footer demo buttons event
+   footerDemoButtons.forEach(button => {
+     button.addEventListener('click', () => {
+       const demoName = button.getAttribute('data-demo');
+       footerDemoPopupOverlay.classList.add('open');
+       footerDemoPopup.focus();
+
+       switch(demoName) {
+         case 'Cab open':
+           cabOpenFeature();
+           break;
+         case 'Lottery open':
+           lotteryOpenFeature();
+           break;
+         case 'Trip open':
+           tripOpenFeature();
+           break;
+         case 'Booking open':
+           bookingOpenFeature();
+           break;
+         default:
+           gliderContainer.innerHTML = `<div class="glider-item" tabindex="0" aria-label="Unknown feature">Unknown feature selected.</div>`;
+       }
+     });
+   });
+
+   footerDemoPopupClose.addEventListener('click', () => {
+     footerDemoPopupOverlay.classList.remove('open');
+     gliderContainer.innerHTML = '';
+   });
+
+   // Close footer demo popup on Escape key
+   document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape' && footerDemoPopupOverlay.classList.contains('open')) {
+       footerDemoPopupOverlay.classList.remove('open');
+       gliderContainer.innerHTML = '';
+     }
+   });
+
+   // Close footer demo popup when clicking outside
+   footerDemoPopupOverlay.addEventListener('click', (e) => {
+     if (e.target === footerDemoPopupOverlay) {
+       footerDemoPopupOverlay.classList.remove('open');
+       gliderContainer.innerHTML = '';
+     }
+   });
+  </script>
+ </body>
+</html>

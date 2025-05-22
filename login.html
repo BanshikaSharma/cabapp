@@ -1,0 +1,235 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Book it - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
+    body {
+      font-family: "Indie Flower", cursive;
+      background: linear-gradient(135deg, #000000, #ff69b4);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffc0cb;
+      padding: 1.5rem;
+    }
+    .neumorph {
+      background: #1a001a;
+      border-radius: 20px;
+      box-shadow:
+        8px 8px 15px #330033,
+        -8px -8px 15px #660066,
+        inset 2px 2px 5px #440044,
+        inset -2px -2px 5px #220022;
+      color: #ffc0cb;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      width: 100%;
+      max-width: 400px;
+      padding: 3rem 2.5rem 3rem 2.5rem;
+    }
+    .neumorph:focus-within {
+      box-shadow:
+        8px 8px 20px #ff69b4,
+        -8px -8px 20px #ffb6c1,
+        inset 2px 2px 6px #ff69b4,
+        inset -2px -2px 6px #ffb6c1;
+      outline: none;
+      transform: translateY(-2px);
+    }
+    input,
+    button {
+      font-family: "Indie Flower", cursive;
+      font-size: 1.2rem;
+      color: #ffc0cb;
+      background: #330033;
+      border: none;
+      border-radius: 12px;
+      box-shadow:
+        inset 4px 4px 8px #660066,
+        inset -4px -4px 8px #330033;
+      padding: 0.75rem 1.25rem;
+      transition: box-shadow 0.3s ease, background-color 0.3s ease;
+      width: 100%;
+      letter-spacing: 0.03em;
+    }
+    input::placeholder {
+      color: #ffb6c1;
+      opacity: 0.8;
+      font-style: italic;
+    }
+    input:focus {
+      outline: none;
+      box-shadow:
+        0 0 12px #ff69b4,
+        inset 4px 4px 10px #ff69b4,
+        inset -4px -4px 10px #ffb6c1;
+      background: #440044;
+    }
+    button {
+      cursor: pointer;
+      box-shadow:
+        8px 8px 20px #330033,
+        -8px -8px 20px #660066;
+      font-weight: 700;
+      user-select: none;
+      margin-top: 1.5rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: #fff;
+      text-shadow: 0 0 5px #ff69b4;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+      box-shadow:
+        6px 6px 12px #a0006a,
+        -6px -6px 12px #ff4db8;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      box-shadow:
+        8px 8px 20px #ff4db8,
+        -8px -8px 20px #ff1493;
+      transform: translateY(-2px);
+    }
+    button:active {
+      box-shadow:
+        inset 6px 6px 12px #660066,
+        inset -6px -6px 12px #330033;
+      transform: translateY(1px);
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+      color: #ff69b4;
+      user-select: none;
+      text-align: center;
+      text-shadow:
+        0 0 8px #ff69b4,
+        0 0 15px #ff1493;
+      letter-spacing: 0.1em;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+    label {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      user-select: none;
+      color: #ffb6c1;
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+      display: block;
+    }
+    .error-message {
+      color: #ff4500;
+      font-weight: 700;
+      font-size: 1rem;
+      user-select: none;
+      text-align: center;
+      min-height: 1.5rem;
+      margin-top: -0.75rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+      text-shadow: 0 0 3px #ff4500;
+    }
+    @media (max-width: 480px) {
+      .neumorph {
+        padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 2.25rem;
+        margin-bottom: 1.5rem;
+      }
+      input,
+      button {
+        font-size: 1.1rem;
+        padding: 0.65rem 1rem;
+      }
+      label {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="neumorph" >
+    <h1>Book it - Login</h1>
+    <form id="loginForm" novalidate="">
+      <div>
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Enter your username"
+          autocomplete="username"
+          required=""
+          aria-required="true"
+          aria-describedby="usernameError"
+        />
+        <p id="usernameError" class="error-message" aria-live="polite"></p>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required=""
+          aria-required="true"
+          aria-describedby="passwordError"
+        />
+        <p id="passwordError" class="error-message" aria-live="polite"></p>
+      </div>
+      <button type="submit" aria-label="Login to Book it" >Login</button>
+      <p id="loginError" class="error-message" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
+    const loginError = document.getElementById("loginError");
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      usernameError.textContent = "";
+      passwordError.textContent = "";
+      loginError.textContent = "";
+
+      let valid = true;
+
+      if (!usernameInput.value.trim()) {
+        usernameError.textContent = "Username is required.";
+        valid = false;
+      }
+      if (!passwordInput.value.trim()) {
+        passwordError.textContent = "Password is required.";
+        valid = false;
+      }
+      if (!valid) return;
+
+      // For demo, accept any username and password
+      // On success, redirect to main app page (replace with actual URL or path)
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
