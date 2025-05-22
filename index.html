@@ -47,7 +47,7 @@
     input,
     button {
       font-family: "Indie Flower", cursive;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       color: #ffc0cb;
       background: #330033;
       border: none;
@@ -55,10 +55,12 @@
       box-shadow:
         inset 4px 4px 8px #660066,
         inset -4px -4px 8px #330033;
-      padding: 0.75rem 1.25rem;
+      padding: 1rem 1.5rem;
       transition: box-shadow 0.3s ease, background-color 0.3s ease;
       width: 100%;
       letter-spacing: 0.03em;
+      min-height: 3.5rem;
+      box-sizing: border-box;
     }
     input::placeholder {
       color: #ffb6c1;
@@ -90,6 +92,8 @@
       box-shadow:
         6px 6px 12px #a0006a,
         -6px -6px 12px #ff4db8;
+      min-height: 3.5rem;
+      padding: 0 1.5rem;
     }
     button:hover {
       background: linear-gradient(135deg, #ff1493, #ff69b4);
@@ -127,7 +131,7 @@
       margin-bottom: 0.5rem;
       user-select: none;
       color: #ffb6c1;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       letter-spacing: 0.03em;
       display: block;
     }
@@ -154,11 +158,12 @@
       }
       input,
       button {
-        font-size: 1.1rem;
-        padding: 0.65rem 1rem;
+        font-size: 1.25rem;
+        padding: 0.9rem 1.25rem;
+        min-height: 3rem;
       }
       label {
-        font-size: 1rem;
+        font-size: 1.1rem;
       }
     }
   </style>
